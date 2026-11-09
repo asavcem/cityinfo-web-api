@@ -1,31 +1,31 @@
 # CityInfo Web API
 
-An ASP.NET Core 10 learning project for managing cities and their points of interest. It demonstrates database-backed REST endpoints, DTO mapping, repository-based data access, and composable search and filtering.
+Şehirleri ve şehirlerdeki ilgi noktalarını yönetmek için geliştirdiğim bir ASP.NET Core 10 eğitim projesi. Veritabanı kullanan REST endpoint'leri, DTO eşlemeyi, repository üzerinden veri erişimini ve birlikte uygulanabilen arama ve filtreleme koşullarını örnekliyor.
 
-Built while following Kevin Dockx's [ASP.NET Core 10 Web API Essentials: Supporting Databases, Searching, Filtering, and Paging](https://www.pluralsight.com/courses/asp-dot-net-core-10-web-api-essentials-supporting-databases-searching-filtering-paging) on Pluralsight, continuing an existing CityInfo API from earlier lessons.
+Önceki derslerde oluşturduğum CityInfo API'yi, Kevin Dockx'un Pluralsight eğitimiyle geliştirdim. [ASP.NET Core 10 Web API Essentials: Supporting Databases, Searching, Filtering, and Paging](https://www.pluralsight.com/courses/asp-dot-net-core-10-web-api-essentials-supporting-databases-searching-filtering-paging)
 
-**Status:** Practical work closed after modules 1–3 and the search/filter implementation in module 4. Paging and a separate service layer were not implemented. Remaining course videos are planned as viewing only.
+**Proje durumu.** İlk üç bölümü tamamladım ve dördüncü bölümde arama ile filtrelemeyi uyguladım. Uygulamalı çalışma bu aşamada sona erdi. Paging ve ayrı bir service layer kursun kalan konuları arasında.
 
-## What the project demonstrates
+## Uygulanan özellikler
 
-- EF Core with SQLite, entity relationships, three migrations, and seeded data.
-- Repository interfaces and scoped dependency injection.
-- Async queries, optional related-data loading with `Include`, and read-only queries with `AsNoTracking`.
-- Entity-to-DTO mapping with AutoMapper.
-- Creating, reading, replacing, patching, and deleting points of interest.
-- Validation, HTTP status codes, and a `Location` header for created resources.
-- Bulk description updates with `ExecuteUpdateAsync`; the repository also contains an `ExecuteDeleteAsync` example.
-- Request cancellation propagated through the city-list query.
-- Exact city-name filtering and substring search across city names and descriptions.
-- JSON/XML responses and a development OpenAPI JSON document.
+- EF Core ve SQLite ile entity ilişkileri, üç migration ve seed data.
+- Repository interface'leri ve scoped dependency injection.
+- Async sorgular, `Include` ile ilişkili verileri isteğe bağlı yükleme ve `AsNoTracking` ile salt okunur sorgular.
+- AutoMapper ile entity ve DTO eşleme.
+- İlgi noktaları için oluşturma, okuma, tam güncelleme, kısmi güncelleme ve silme.
+- Validation, HTTP durum kodları ve oluşturulan kaynaklar için `Location` header'ı.
+- `ExecuteUpdateAsync` ile toplu açıklama güncellemesi ve repository içinde `ExecuteDeleteAsync` örneği.
+- Şehir listesi sorgusuna iletilen request cancellation.
+- Şehir adına göre tam eşleşmeli filtreleme, ad ve açıklamada metin arama.
+- JSON ve XML yanıtları ile Development ortamında OpenAPI JSON belgesi.
 
-## Technology
+## Kullanılan teknolojiler
 
-.NET 10 · ASP.NET Core controllers · Entity Framework Core 10 · SQLite · AutoMapper · System.Text.Json JSON Patch
+.NET 10 · ASP.NET Core Controllers · Entity Framework Core 10 · SQLite · AutoMapper · System.Text.Json JSON Patch
 
-## Run locally
+## Yerelde çalıştırma
 
-Prerequisite: the .NET 10 SDK. Commands below use PowerShell, starting from this repository's root.
+.NET 10 SDK gerekir. PowerShell'de depo kökünden başlayarak aşağıdaki komutları çalıştır.
 
 ```powershell
 dotnet restore CityInfo.slnx
@@ -36,17 +36,17 @@ dotnet ef database update
 dotnet run --launch-profile http
 ```
 
-The local EF tool is pinned to the project's EF Core version. Run migration and startup commands from `CityInfo.API` so the relative SQLite path resolves to the same file. Migration creates `CityInfo.db` with three cities and six points of interest; no database file is distributed.
+Yerel EF aracı, projedeki EF Core sürümüne sabitlenmiştir. SQLite'ın göreli dosya yolunun aynı konumu göstermesi için migration ve başlatma komutlarını `CityInfo.API` klasöründe çalıştır. Migration, üç şehir ve altı ilgi noktası içeren `CityInfo.db` dosyasını oluşturur.
 
-- API: `http://localhost:5124/api/cities`
-- OpenAPI JSON: `http://localhost:5124/openapi/v1.json` (Development only).
-- Request examples: [CityInfo.API.http](CityInfo.API/CityInfo.API.http).
+- Şehir listesi `http://localhost:5124/api/cities` adresinde.
+- OpenAPI JSON belgesi Development ortamında `http://localhost:5124/openapi/v1.json` adresinde.
+- Hazır HTTP istekleri [CityInfo.API.http](CityInfo.API/CityInfo.API.http) dosyasında.
 
-For HTTPS, run `dotnet dev-certs https --trust`, use `dotnet run --launch-profile https`, and change the request file's base URL to `https://localhost:7150`.
+HTTPS kullanmak için `dotnet dev-certs https --trust` komutunu çalıştır, uygulamayı `dotnet run --launch-profile https` ile başlat ve istek dosyasındaki base URL'yi `https://localhost:7150` olarak güncelle.
 
-The checked-in development connection string points only to a local SQLite file. For a different location, set `ConnectionStrings__CityInfoDBConnectionString` in the environment. Outside Development, provide that setting explicitly.
+Development ortamındaki connection string yerel bir SQLite dosyasına işaret eder. Dosyayı farklı bir konuma almak için `ConnectionStrings__CityInfoDBConnectionString` ortam değişkenini ayarla. Development dışındaki ortamlarda bu ayarı ayrıca belirt.
 
-## Try the API
+## API'yi deneme
 
 ```powershell
 Invoke-RestMethod 'http://localhost:5124/api/cities'
@@ -56,29 +56,29 @@ Invoke-RestMethod 'http://localhost:5124/api/cities?name=Paris&searchQuery=tower
 Invoke-RestMethod 'http://localhost:5124/api/cities/3?includePointsOfInterest=true'
 ```
 
-`name` applies an exact match after trimming. `searchQuery` is trimmed and matched against the name or a non-null description. Providing both combines them with AND. Results are ordered by city name. Case behavior follows the configured SQLite string operations.
+`name` parametresi, baştaki ve sondaki boşluklar temizlendikten sonra tam eşleşme arar. `searchQuery` de aynı şekilde temizlenir ve şehir adında veya varsa açıklamasında aranır. İki parametreyi birlikte verdiğinde koşullar AND ile birleşir. Sonuçlar şehir adına göre sıralanır. Büyük ve küçük harf davranışı, SQLite'ın kullandığı metin karşılaştırmalarına bağlıdır.
 
-| Method | Route | Purpose / success response |
-| --- | --- | --- |
-| GET | `/api/cities` | List, filter, or search cities; 200 |
-| GET | `/api/cities/{cityId}` | Read a city, optionally including points of interest; 200 |
-| GET | `/api/cities/{cityId}/pointsofinterest` | List a city's points of interest; 200 |
-| GET | `/api/cities/{cityId}/pointsofinterest/{id}` | Read one point of interest; 200 |
-| POST | `/api/cities/{cityId}/pointsofinterest` | Create; 201 with Location |
-| PUT | `/api/cities/{cityId}/pointsofinterest/{id}` | Replace; 204 |
-| PATCH | `/api/cities/{cityId}/pointsofinterest/{id}` | JSON Patch; 204 |
-| DELETE | `/api/cities/{cityId}/pointsofinterest/{id}` | Delete; 204 |
-| PUT | `/api/cities/{cityId}/pointsofinterest/bulk` | Update descriptions; 200 with `updatedCount` |
+| HTTP metodu | Route | İşlem | Başarılı yanıt |
+| --- | --- | --- | --- |
+| GET | `/api/cities` | Şehirleri listele, filtrele veya ara | 200 |
+| GET | `/api/cities/{cityId}` | Bir şehri getir, isteğe bağlı olarak ilgi noktalarını ekle | 200 |
+| GET | `/api/cities/{cityId}/pointsofinterest` | Bir şehrin ilgi noktalarını listele | 200 |
+| GET | `/api/cities/{cityId}/pointsofinterest/{id}` | Bir ilgi noktasını getir | 200 |
+| POST | `/api/cities/{cityId}/pointsofinterest` | İlgi noktası oluştur | 201 ve `Location` |
+| PUT | `/api/cities/{cityId}/pointsofinterest/{id}` | İlgi noktasını tamamen güncelle | 204 |
+| PATCH | `/api/cities/{cityId}/pointsofinterest/{id}` | JSON Patch ile kısmi güncelleme yap | 204 |
+| DELETE | `/api/cities/{cityId}/pointsofinterest/{id}` | İlgi noktasını sil | 204 |
+| PUT | `/api/cities/{cityId}/pointsofinterest/bulk` | Açıklamaları toplu güncelle | 200 ve `updatedCount` |
 
-Create/replace bodies use `name` and optional `description`; bulk updates use `newDescription`. PATCH requests use `application/json-patch+json`, for example:
+Oluşturma ve tam güncelleme isteklerinde `name` ve isteğe bağlı `description` kullanılır. Toplu güncelleme `newDescription` alanını alır. Aşağıdaki PATCH isteğinin content type değeri `application/json-patch+json` olmalıdır.
 
 ```json
 [{ "op": "replace", "path": "/name", "value": "Updated attraction" }]
 ```
 
-## Verify
+## Doğrulama
 
-From the repository root:
+Depo kökünde aşağıdaki komutları çalıştır.
 
 ```powershell
 dotnet build CityInfo.slnx
@@ -86,38 +86,36 @@ dotnet build CityInfo.slnx -c Release
 ./scripts/Verify-Api.ps1
 ```
 
-The smoke script builds the API, creates a fresh temporary SQLite database using the migrations, starts its own local API process, checks search/filtering, reads, CRUD, validation, bulk updates, and OpenAPI, then stops that process. It does not use your working database. Logs and the disposable test database are kept in the printed temporary directory.
+Smoke test betiği API'yi derler, migration'larla geçici bir SQLite veritabanı kurar ve yerel bir API süreci başlatır. Arama, filtreleme, okuma, CRUD, validation, toplu güncelleme ve OpenAPI isteklerini kontrol ettikten sonra süreci kapatır. Log dosyaları ve test veritabanı, betiğin ekrana yazdığı geçici klasörde kalır.
 
-This is a smoke check, not a comprehensive automated test suite.
+1 Kasım 2026'da Debug ve Release derlemeleri uyarı ve hata olmadan tamamlandı. Migration ile sıfırdan kurulan veritabanında 24 HTTP smoke test başarılı oldu. NuGet taraması, o tarihte kullanılan kaynaklardaki doğrudan ve dolaylı paket bağımlılıklarında bilinen bir güvenlik açığı bildirmedi.
 
-Verified on 2026-11-01: Debug and Release builds passed with no warnings or errors; all 24 HTTP smoke checks passed using a fresh migrated database. NuGet's direct/transitive vulnerability check reported no known vulnerable packages in the configured sources at that time.
-
-## Structure
+## Proje yapısı
 
 ```text
 CityInfo.API/
-  Controllers/   HTTP endpoints
-  DbContexts/    EF Core configuration and seed data
-  Entities/      Database entities and relationships
-  Migrations/    Reproducible schema and seed changes
-  Models/        Request and response DTOs
-  Profiles/      AutoMapper mappings
-  Services/      Repository contract, implementation, and mail demos
-scripts/         Repeatable API smoke verification
-.config/         Local EF CLI tool manifest
+  Controllers/   HTTP endpoint'leri
+  DbContexts/    EF Core yapılandırması ve seed data
+  Entities/      Veritabanı entity'leri ve ilişkileri
+  Migrations/    Şema ve seed data değişiklikleri
+  Models/        İstek ve yanıt DTO'ları
+  Profiles/      AutoMapper eşlemeleri
+  Services/      Repository sözleşmesi, implementasyonu ve e-posta örnekleri
+scripts/         API smoke test betiği
+.config/         Yerel EF CLI manifest dosyası
 ```
 
-The request flow is controller → repository → EF Core → SQLite, with AutoMapper between entities and DTOs. There is no separate business service layer.
+İstekler controller → repository → EF Core → SQLite akışını izler. AutoMapper, entity'ler ile DTO'lar arasındaki eşlemeyi yapar.
 
-## Scope and limitations
+## Kapsam
 
-This is a course-based portfolio sample, not a production deployment. Authentication, authorization policies, paging, and a separate service layer are outside the implemented scope. Cancellation is demonstrated on the city-list path.
+Bu proje, kurs boyunca uyguladığım konuları bir araya getiren bir portföy örneği. Authentication, authorization policy'leri, paging ve ayrı bir service layer uygulama kapsamı dışında. Cancellation, şehir listesi sorgusunda örnekleniyor.
 
-`LocalMailService` and `CloudMailService` both write to the console; neither sends real email. The inherited file controller is a separate demonstration: its download action looks for an optional local `sample-file.pdf` and returns 404 when absent. Uploads check the supplied content type and size; file contents are not inspected. Sample PDFs and uploads are excluded.
+`LocalMailService` ve `CloudMailService`, e-posta davranışını konsola yazarak örnekler. Önceki dersten gelen dosya controller'ı, indirme isteğinde yerel `sample-file.pdf` dosyasını arar ve dosya yoksa 404 döndürür. Yükleme işlemi, istekte belirtilen content type değerini ve dosya boyutunu denetler. Örnek PDF'ler ve yüklenen dosyalar yerelde tutulur.
 
-## Learning focus and attribution
+## Öğrenme süreci ve kaynak
 
-The practical work focused on moving from in-memory data to persistent EF Core queries, understanding foreign keys and navigation properties, separating entities from API DTOs, and implementing repository-backed mutations. Troubleshooting included dependency injection, migration tooling, bulk-update expressions, cancellation, and keeping composed filters in the final query.
+Bellek içi veriden kalıcı EF Core sorgularına geçtim. Foreign key ile navigation property ilişkisini, entity ve DTO ayrımını ve repository üzerinden veri değiştirme işlemlerini uyguladım. Dependency injection, migration araçları, toplu güncelleme ifadeleri, cancellation ve eklenen filtrelerin son sorguya taşınması üzerinde çalıştım.
 
-CityInfo and the lesson design originate from the linked Kevin Dockx / Pluralsight course. This repository records my course-following implementation and adaptations; AI assistance was used for selected explanations, troubleshooting, code edits, and documentation. Course videos, transcripts, and downloaded reference archives are not included. Third-party packages retain their own licenses.
+CityInfo örneği ve derslerin kurgusu Kevin Dockx'un yukarıda bağlantısı verilen Pluralsight eğitimine dayanıyor. Bu depoda eğitim sırasında yaptığım uygulama ve uyarlamalar yer alıyor. Bazı açıklamalarda, hata gidermede, kod düzenlemelerinde ve dokümantasyonda yapay zekâ desteği kullandım. Üçüncü taraf paketlerin kendi lisansları geçerlidir.
 
