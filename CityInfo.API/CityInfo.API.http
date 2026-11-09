@@ -1,0 +1,186 @@
+@baseUrl = http://localhost:5124
+@cityId = 3
+@pointOfInterestId = 5
+
+###
+### Cities Endpoints
+###
+
+### Get all cities
+GET {{baseUrl}}/api/cities
+Accept: application/json
+
+### Get all cities (XML format)
+GET {{baseUrl}}/api/cities
+Accept: application/xml
+
+### Get all cities, filtered
+GET {{baseUrl}}/api/cities?name=Antwerp
+Accept: application/json
+
+### Get all cities, searched
+GET {{baseUrl}}/api/cities?searchQuery=park
+Accept: application/json
+
+### Get specific city
+GET {{baseUrl}}/api/cities/{{cityId}}
+Accept: application/json
+
+### Get specific city with points of interest
+GET {{baseUrl}}/api/cities/{{cityId}}?includePointsOfInterest=true
+Accept: application/json
+
+### Get city that doesn't exist
+GET {{baseUrl}}/api/cities/999
+Accept: application/json
+
+###
+### Points of Interest Endpoints
+###
+
+### Get all points of interest for a city
+GET {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest
+Accept: application/json
+
+### Get all points of interest for a city that doesn't exist
+GET {{baseUrl}}/api/cities/999/pointsofinterest
+Accept: application/json
+
+### Get specific point of interest
+GET {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+Accept: application/json
+
+### Get point of interest that doesn't exist
+GET {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/999
+Accept: application/json
+
+### Get point of interest for a city that doesn't exist
+GET {{baseUrl}}/api/cities/999/pointsofinterest/999
+Accept: application/json
+ 
+### Create a new point of interest
+POST {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest
+Content-Type: application/json
+
+{
+  "name": "New Attraction",
+  "description": "A wonderful new place to visit"
+}
+
+### Create a new point of interest
+POST {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest
+Content-Type: application/json
+{
+  "thisdoesnotexist": "",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+}
+
+### Update point of interest (full update with PUT)
+PUT {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+Content-Type: application/json
+
+{
+  "name": "Updated Attraction Name",
+  "description": "Updated description for this location"
+}
+
+### Update point of interest (full update with PUT, no description)
+PUT {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+Content-Type: application/json
+
+{
+  "name": "Another Updated Attraction Name"
+}
+
+### Partially update point of interest (PATCH with JSON Patch - Replace operation)
+PATCH {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/name",
+    "value": "Patched Name"
+  }
+]
+
+### Partially update point of interest (PATCH with JSON Patch - Multiple operations)
+PATCH {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/name",
+    "value": "Completely New Name"
+  },
+  {
+    "op": "replace",
+    "path": "/description",
+    "value": "Completely new description"
+  }
+]
+
+### Partially update point of interest (invalid property)
+PATCH {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "replace",
+    "path": "/invalidproperty",
+    "value": "Patched Value"
+  }
+]
+
+### Partially update point of interest (invalid patched resource)
+PATCH {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+Content-Type: application/json-patch+json
+
+[
+  {
+    "op": "remove",
+    "path": "/name"
+  }
+]
+
+### Delete point of interest
+DELETE {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/{{pointOfInterestId}}
+
+### Bulk update points of interest 
+PUT {{baseUrl}}/api/cities/{{cityId}}/pointsofinterest/bulk
+Content-Type: application/json
+
+{
+  "newDescription": "This is a new description from a bulk update"
+}
+
+
+###
+### File Endpoints
+###
+
+### Get a file
+GET {{baseUrl}}/api/files/sample-file-identifier
+Accept: application/pdf
+
+### Upload a PDF file (requires multipart/form-data)
+# Note: You'll need to update this with an actual file path on your system 
+POST {{baseUrl}}/api/files
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="sample-file.pdf"
+Content-Type: application/pdf
+
+< ./sample-file.pdf
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+###
+### OpenAPI Documentation Endpoints
+###
+
+### Get OpenAPI JSON document
+GET {{baseUrl}}/openapi/v1.json
+Accept: application/json

@@ -1,0 +1,6 @@
+sample-file.pdf
+uploaded_file_*.pdf
+
+# SQLite runtime sidecar files
+CityInfo.db-shm
+CityInfo.db-wal

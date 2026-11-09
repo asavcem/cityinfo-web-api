@@ -1,0 +1,26 @@
+# Build and IDE output
+**/bin/
+**/obj/
+.vs/
+.idea/
+.vscode/
+*.user
+*.suo
+
+# Local configuration and credentials
+.env
+.env.*
+secrets.json
+appsettings.Local.json
+
+# Recreate SQLite databases with the committed migrations
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Local demonstration files and uploads
+sample-file.pdf
+uploaded_file_*.pdf
+*.log
